@@ -51,6 +51,6 @@ Commands:
 
 NOTE: TCL should be able to find the package *snackvox*, e.g. by including the directory where it is stored in the *::auto-path* variable.
 
-[example 1](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Monitor the audio level (helps with getting a value for a *-threshold* setting):
+[example 1](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Monitor the audio level (helps with getting an initial value for a *-threshold* setting):
 
 [expample 2](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Echo the input and display the **on** and **off** events:
