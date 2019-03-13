@@ -93,42 +93,6 @@ Commands:
 
 NOTE: TCL should be able to find the package *snackvox*, e.g. by including the directory where it is stored in the *::auto-path* variable.
 
-Monitor the audio level (helps with getting a value for a *-threshold* setting):
-```
-package require snackvox
-proc monitor {var args} {
-	puts -nonewline [format \r%6s [set $var]]
-	flush stdout
-}
-snack::vox vox1
-trace add variable [vox1 cget -levelvariable] write monitor
-vox1 activate
-update
-vwait forever
-```
+[example 1](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Monitor the audio level (helps with getting a value for a *-threshold* setting):
 
-Echo the input and display the **on** and **off** events:
-```
-package require snackvox
-proc monitor {var args} {
-	puts -nonewline [format \r%6s [set $var]]
-	flush stdout
-}
-# use a separate sound objuct to echo the recorded sound, while still monitoring the input
-sound s1
-# create a snackvox widget
-snack::vox vox1 -threshold 5000 -oncommand {apply {args {
-	puts \ton\t[dict get $args minlevel]
-}}} -offcommand {apply {args {
-	s1 copy [dict get $args sound] -start [dict get $args start] -end [dict get $args end]
-	s1 play
-	puts \toff\t[dict get $args maxlevel]
-}}}
-# monitor the input level
-trace add variable [vox1 cget -levelvariable] write monitor
-vox1 activate
-vox1 start
-# start TCL's event loop
-update
-vwait forever
-```
+[expample 2](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Echo the input and display the **on** and **off** events:
