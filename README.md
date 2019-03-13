@@ -11,7 +11,7 @@ Based on the Snack Sound Toolkit and written in the Tool Command Language, TCL.
 - <a href='https://www.speech.kth.se/snack/index.html'>Snack 2.2.10</a>, **sound** TCL package
 - [TCL 8.6](https://www.tcl.tk/software/tcltk/8.6.html)
 
-### Principle of operation:
+### Description of operation:
 See the [wiki pages](https://github.com/dzach/snackvox/wiki/Principle-of-operation).
 ### Coding ###
 Create the widget with:
