@@ -9,7 +9,7 @@ Based on the Snack Sound Toolkit's objects and written in the Tool Command Langu
 
 ### Principle of operation:
 
-![how does it work] (http://hs.local:3000/me/snackvox/raw/master/img/howdoesitwork.png)
+![how does it work] (https://github.com/dzach/snackvox/raw/master/img/howdoesitwork.png)
 
 ### Short description of operation:
 
