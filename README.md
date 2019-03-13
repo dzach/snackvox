@@ -1,7 +1,8 @@
 # Snackvox
 
-A software Voice Operated Switch.
-Based on the Snack Sound Toolkit and written in the Tool Command Language, TCL.
+A software Voice Operated Switch, written as a package for the Tool Command Language, TCL.
+
+Based on the Snack Sound Toolkit .
 
 **Snackvox** can be used as a sound sensor to record sounds of interest. The Snack Toolkit provides software tools to facilitate characterization of sounds based on pitch, power, frequency content (FFT), formants, et.c. **Snackvox** can isolate audio segments and directly process them or save them to disk for processing at a later time.
 
