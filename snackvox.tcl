@@ -193,7 +193,7 @@ proc detect w {
 					incr v(holdcnt_f) -1
 					# reset current continous frame count
 					set v(curcont_f) 0
-					# wait for more sound ?
+					# done with hold time ?
 					if {$v(holdcnt_f) <= 0 && $v(state) == 2} {
 						## hold ended with no more sound and tail target reached
 						if {[llength $v(-offcommand)]} {
