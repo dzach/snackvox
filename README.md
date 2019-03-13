@@ -4,7 +4,7 @@ A software Voice (sound) Operated Switch.
 Based on the Snack Sound Toolkit's objects and written in the Tool Command Language, TCL.
 
 ### Prerequisits:
-	- Snack 2.2.10, http://www.speech.kth.se/snack/index.html, TCL package
+	- [Snack 2.2.10](http://www.speech.kth.se/snack/index.html), TCL package
 	- TCL 8.6
 
 ### Principle of operation:
