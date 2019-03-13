@@ -32,12 +32,12 @@ Diagram description:
 ### Description of operation:
 
 The **switch** function works by examining the incoming audio for the presense of a sound. The **on** and **off** state of the switch depends on the following criteria:
-- If a sound exists and is above a trigger level set with *-threshold*, or if a sound has just dropped below the trigger level but no *-hold* time has yet passed, then the switch is **on**. 
+- If a sound exists and is above a trigger level set with *-threshold*, or if a sound has just dropped below the trigger level but *-hold* time has not yet expired, then the switch is **on**. 
 - If the sound has been below the trigger level for more than *-hold* seconds, then the switch is **off**. 
 
 The transitions between the **on** and **off** states define a **sound event**. 
 
-At the beginning and the end of a sound event, the *-oncommand* and *-offcommand* callback routines are called, if defined, with the following arguments: *sound* object, *start* sample, *end* sample, *minlevel*, *maxlevel*, *onframes*, *continuous*-on frames. However, certain arguments, i.e. *end*, *onframes*, *continuous*, have only meaning with the *-offcommand*.
+At the beginning and the end of a sound event, the *-oncommand* and *-offcommand* callback routines are called, if defined, with the following arguments in a [dict] format: *sound* object, *start* sample, *end* sample, *minlevel*, *maxlevel*, *onframes*, *continuous*-on frames. Certain arguments, i.e. *end*, *onframes*, *continuous*, have only meaning with the *-offcommand*.
 
 The *-offcommand* callback can make use of the *start* and *end* values and, for example, further examine and/or save the sound event to disk.
 
