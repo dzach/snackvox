@@ -3,9 +3,9 @@
 A software Voice (sound) Operated Switch.
 Based on the Snack Sound Toolkit's objects and written in the Tool Command Language, TCL.
 
-### Prerequisits:
-	- [Snack 2.2.10](http://www.speech.kth.se/snack/index.html), TCL package
-	- TCL 8.6
+### Dependencies:
+- <a href='https://www.speech.kth.se/snack/index.html'>Snack 2.2.10</a>, TCL package
+- [TCL 8.6](https://www.tcl.tk/software/tcltk/8.6.html)
 
 ### Principle of operation:
 
@@ -25,21 +25,21 @@ Based on the Snack Sound Toolkit's objects and written in the Tool Command Langu
   tail frames. These become the *start* and *end* pointers of the
   sound event. 
 
-Due to the operation on frames, e.g. segments of sound, at a time, snackvox is able to keep sound that happened *before* the trigger time, thus avoiding cutting off the beginning of a sound event.
+snackvox manages to capture the very start of a sound event by storing frames of sound *before* the trigger happens.
 
-Create with:
+Create the widget with:
 
 ```
 snack::vox <widget-name> ?option value ...? 
 
 where 'option' may be any of:
 
--buffer        : max length of the vox sound object, defaults to 30 seconds
+-buffer        : max length of the vox sound object, defaults to 30.0 seconds
 -device        : audio device to use, defaults to the first audio input device found
--head          : prepend sound that happened '-head' seconds before the trigger
+-head          : prepend sound that happened '-head' decimal seconds before the trigger
 -oncommand, 
 -offcommand    : vox switch callback scripts, user definable
--tail          : append sound that happended '-tail' seconds after the sound went off
+-tail          : append sound that happended '-tail' decimal seconds after the sound went off
 -threshold     : trigger level setting
 -thresholdvariable :
                  variable name to read the threshold value from
