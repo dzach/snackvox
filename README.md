@@ -78,7 +78,7 @@ where 'option' may be any of:
 
 ```
 
-Commands (see the comming [manual](http://)):
+Commands:
 ```
 *pathName* activate
 *pathName* deactivate
