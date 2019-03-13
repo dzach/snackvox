@@ -8,7 +8,7 @@ Based on the Snack Sound Toolkit and written in the Tool Command Language, TCL.
 **Snackvox** successfully runs on a **Raspberry Pi Zero** as a sound sensor, while at the same time transferring the sound files it creates to a remote server using *rsync*. CPU utilization is less than 15% on a Raspebby Pi Zero, while in listening mode.
 
 ### Dependencies:
-- <a href='https://www.speech.kth.se/snack/index.html'>Snack 2.2.10</a>, TCL package
+- <a href='https://www.speech.kth.se/snack/index.html'>Snack 2.2.10</a>, **sound** TCL package
 - [TCL 8.6](https://www.tcl.tk/software/tcltk/8.6.html)
 
 ### Principle of operation:
