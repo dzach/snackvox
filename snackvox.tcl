@@ -22,7 +22,7 @@
 # 	                 to facilitate setting by e.g. a Tk scale widget
 # -levelvariable   : indicates max sound level measured during a sound frame
 #
-if {[catch {package req sound}]} {
+if {[catch {package req sound}] && [catch {package require snack}]} {
 	error "package sound is required"
 }
 namespace eval ::snack::vox {
@@ -50,11 +50,11 @@ proc bufferfull w {
 	##   this will become '0' ---^                         |
 	##             this will be the current frame start ---^
 	##
-	if {$v(state) && [llength $v(-offcommand)]} {
+	if {$v(vstate) && [llength $v(-offcommand)]} {
 		eval $v(-offcommand) sound $v(snd) start $v(head_p) end [expr {$v(fs_p) - 1}] minlevel $v(minlev) maxlevel $v(maxlev) onframes $v(onframes) continuous $v(continuous_f)
 		$v(snd) cut 0 [expr {$v(fs_p) - 1}]
-		# reset state
-		set v(state) 0
+		# reset vstate
+		set v(vstate) 0
 		set v(maxlev) 0
 		set v(onframes) 0
 		set v(fs_p) 0
@@ -83,11 +83,9 @@ proc detect w {
 		# v(fs_p) : pointer to the first sample of this frame
 		set nlen_s [expr {[$v(snd) length] - $v(fs_p)}]
 		# v(flen_s) is the frame length in samples
-		#puts "[$v(snd) length] - $v(fs_p)"
 		while {$nlen_s >= $v(flen_s)} {
 			# assign frame start and end sample pointers and flags
 			set fend_p [expr {$v(fs_p) + $v(flen_s) - 1}]
-			#puts state=$v(state)\t$v(fs_p)\t$fend_p
 			## -----------------------------------------------
 			## sound event detection
 			## -----------------------------------------------
@@ -100,7 +98,7 @@ proc detect w {
 				::tcl::mathfunc::max {*}[$v(snd) power -start $v(fs_p) -end $fend_p]
 			])}]
 			# Are we just monitoring the sound level?
-			if {!$v(vox)} {
+			if {!$v(-state)} {
 				# no other action is required. Advance the frame start pointer
 				if {[$v(snd) length] >= $v(highwater_s)} {
 					bufferfull $w
@@ -132,13 +130,13 @@ proc detect w {
 			##               went off
 			##
 			## -----------------------------------------------
-			# set trigger state
+			# set trigger vstate
 			set sig [expr {
 				[set $v(-levelvariable)] > [set $v(-thresholdvariable)]? 1:0
 			}]
-			if {$v(state) == 0} { # we have been in a quiet state so far
-				if {$sig} {        # state = 0, sig = 1, we just detected a sound
-					set v(state) 1
+			if {$v(vstate) == 0} { # we have been in a quiet state so far
+				if {$sig} {        # vstate = 0, sig = 1, we just detected a sound
+					set v(vstate) 1
 					# set counter for hold and tail frames
 					set v(holdcnt_f) $v(hold_f)
 					set v(tailcnt_f) $v(tail_f)
@@ -164,8 +162,8 @@ proc detect w {
 					}
 					set v(curcont_f) 0
 				}
-			} else {             # state >= 1
-				if {$sig} {      # state >= 1,  sig = 1
+			} else {             # vstate >= 1
+				if {$sig} {      # vstate >= 1,  sig = 1
 					# sound is still on, so restart the hold_f and tail_f counters
 					set v(holdcnt_f) $v(hold_f)
 					set v(tailcnt_f) $v(tail_f)
@@ -175,11 +173,11 @@ proc detect w {
 					if {$v(curcont_f) > $v(continuous_f)} {
 						set v(continuous_f) $v(curcont_f)
 					}
-					# reset state. could have been '2'
-					set v(state) 1
+					# reset vstate. could have been '2'
+					set v(vstate) 1
 					set v(maxlev) [::tcl::mathfunc::max $v(maxlev) [set $v(-levelvariable)]]
 
-				} else {         # state >= 1,  sig = 0
+				} else {         # vstate >= 1,  sig = 0
 					# transition from an 'on' to an 'off' condition
 					# count down tail frames
 					incr v(tailcnt_f) -1
@@ -187,21 +185,21 @@ proc detect w {
 					if {$v(tailcnt_f) == 0} { # happens once, values can go negative
 						## tail frames count reached, set the end pointer for the sound event
 						set v(end_p) $fend_p
-						set v(state) 2
+						set v(vstate) 2
 					}
 					# count down hold frames, waiting for some more sound
 					incr v(holdcnt_f) -1
 					# reset current continous frame count
 					set v(curcont_f) 0
 					# done with hold time ?
-					if {$v(holdcnt_f) <= 0 && $v(state) == 2} {
+					if {$v(holdcnt_f) <= 0 && $v(vstate) == 2} {
 						## hold ended with no more sound and tail target reached
 						if {[llength $v(-offcommand)]} {
 							# soundObj start_sample end_sample onframes postproc
 							eval $v(-offcommand) sound $v(snd) start $v(head_p) end $v(end_p) minlevel $v(minlev) maxlevel $v(maxlev) onframes $v(onframes) continuous $v(continuous_f)
 						}
-						# reset state
-						set v(state) 0
+						# reset variables
+						set v(vstate) 0
 						set v(onframes) 0
 						set v(maxlev) 0
 						set v(minlev) Inf
@@ -216,7 +214,6 @@ proc detect w {
 			set nlen_s [expr {[$v(snd) length] - $v(fs_p)}]
 		}
 		# max sound length reached?
-		#puts "[$v(snd) length] >= $v(highwater_s)"
 		if {[$v(snd) length] >= $v(highwater_s)} {
 			bufferfull $w
 		}
@@ -292,10 +289,10 @@ proc handle {w cmd args} {
 			return [getopt $w [lindex $args 0]]
 		}
 		sta* { # start vox operation
-			set v(vox) 1
+			set v(-state) 1
 		}
 		sto* { # stop vox operation, monitor stays on
-			set v(vox) 0
+			set v(-state) 0
 		}
 		des* { # destroy
 			# cancel frame recording
@@ -364,15 +361,17 @@ proc ::snack::vox args {
 		#
 		array set {} {
 			coro {}
-			vox 1 rate 16000 flen_s 800 headlen_s 1600
+			rate 16000 flen_s 800 headlen_s 1600
 			fs_p 0 bs_p 0 head_p 0 end_p 0
-			hold_f 20 tail_f 10 holdcnt_f 20 tailcnt_f 10 continuous_f 0 curcont_f 0
-			state 0 tick {} maxlev 0 minlev Inf
+			hold_f 20 tail_f 10 holdcnt_f 20 tailcnt_f 10 
+			continuous_f 0 curcont_f 0
+			vstate 0 tick {} maxlev 0 minlev Inf
 			-buffer 30
 			-head 0.2
 			-hold 1.5
 			-oncommand {}
 			-offcommand {}
+			-state 0
 			-tail 0.5
 			-threshold 1500
 		}
