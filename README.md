@@ -13,7 +13,7 @@ Based on the Snack Sound Toolkit .
 - [TCL 8.6](https://www.tcl.tk/software/tcltk/8.6.html)
 
 ### Description of operation:
-See the [wiki pages](https://github.com/dzach/snackvox/wiki/Principle-of-operation).
+See the [wiki pages](https://github.com/dzach/snackvox/wiki/Description-of-operation).
 ### Coding ###
 Create the widget with:
 
