@@ -54,4 +54,4 @@ NOTE: TCL should be able to find the package *snackvox*, e.g. by including the d
 
 [example 1](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Monitor the audio level (helps with getting an initial value for a *-threshold* setting):
 
-[expample 2](https://github.com/dzach/snackvox/blob/master/examples/example1.tcl) : Echo the input and display the **on** and **off** events:
+[expample 2](https://github.com/dzach/snackvox/blob/master/examples/example2.tcl) : Echo the input and display the **on** and **off** events:
